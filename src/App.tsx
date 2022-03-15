@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import { Resizable } from 'react-resizable';
+import {Resizable} from 'react-resizable';
 import {Table} from "antd";
 import {ColumnsType} from "antd/lib/table/interface";
+import {TableComponents} from "rc-table/lib/interface";
 
 import './styles.css';
 
@@ -18,7 +19,7 @@ const ResizableTitle = (props: any) => {
       height={0}
       handle={
         <span
-          className="react-resizable-handle"
+          className="react-resizable-left-right-handle"
           onClick={e => {
             e.stopPropagation();
           }}
@@ -29,6 +30,33 @@ const ResizableTitle = (props: any) => {
     >
       <th {...restProps} />
     </Resizable>
+  );
+};
+
+const ResizableRow = (props: any) => {
+  const { onResize, ...restProps } = props;
+
+  const [height, setHeight] = useState(56);
+
+  return (
+    <Resizable
+      width={0}
+      height={height}
+      handle={
+        <span
+          className="react-resizable-top-bottom-handle"
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        />
+      }
+      onResize={(e, data) => {
+        setHeight(data.size.height);
+      }}
+      draggableOpts={{ enableUserSelectHack: false }}
+    >
+      <tr {...restProps} style={{ height }} />
+    </Resizable >
   );
 };
 
@@ -62,10 +90,13 @@ function App() {
     },
   ]);
 
-  const components = {
+  const components: TableComponents<any> = {
     header: {
       cell: ResizableTitle,
     },
+    body: {
+      row: ResizableRow
+    }
   };
 
   const data = [
