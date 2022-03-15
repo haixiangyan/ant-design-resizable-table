@@ -10,11 +10,12 @@ const ResizableTitle = (props: any) => {
   const { onResize, width, ...restProps } = props;
 
   if (!width) {
-    return <th {...restProps} />;
+    return <th {...restProps} style={{ minWidth: 100 }} />;
   }
 
   return (
     <Resizable
+      minConstraints={[200, 0]}
       width={width}
       height={0}
       handle={
@@ -28,7 +29,7 @@ const ResizableTitle = (props: any) => {
       onResize={onResize}
       draggableOpts={{ enableUserSelectHack: false }}
     >
-      <th {...restProps} />
+      <th {...restProps} style={{ minWidth: 200 }} />
     </Resizable>
   );
 };
@@ -60,18 +61,19 @@ const ResizableRow = (props: any) => {
   );
 };
 
-function App() {
+const App = () => {
   const [columns, setColumns] = useState<ColumnsType>([
     {
       title: 'Date',
       dataIndex: 'date',
       width: 200,
+      fixed: 'left',
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
       width: 100,
-      sorter: (a: any, b: any) => a.amount - b.amount,
+      render: (amount) => <span style={{ display: 'inline-flex', overflow: 'auto', wordBreak: 'break-all' }}>{amount}</span>,
     },
     {
       title: 'Type',
@@ -95,8 +97,8 @@ function App() {
       cell: ResizableTitle,
     },
     body: {
-      row: ResizableRow
-    }
+      row: ResizableRow,
+    },
   };
 
   const data = [
@@ -117,7 +119,7 @@ function App() {
     {
       key: 2,
       date: '2018-04-11',
-      amount: 98,
+      amount: 'asjdflajsdlkfjalskdjfalsdkfjalsdkjfskldfjsklsdsdddddddddssssssssssssssssssssssssssssssssssssssssssssssssfja;lsdjflajsdlfjaklsdjflajsdfjlajsdjf',
       type: 'income',
       note: 'transfer',
     },
